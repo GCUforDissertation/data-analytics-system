@@ -69,11 +69,13 @@ st.success("""
 """)
 st.markdown("---")  
 # Upload file
+st.markdown("---")
 st.markdown("## 📤 Upload Your Dataset")
 uploaded_file = st.file_uploader("Choose a CSV file", type=["csv"])
 if not uploaded_file:
-    st.warning("⚠️ Please upload a CSV file to begin analysis.")
+    st.info("⬆️ Upload a CSV file to start exploring your data.")
 if uploaded_file:
+    st.success("✅ File uploaded successfully!") 
     df = pd.read_csv(uploaded_file)
 
     st.subheader("📄 Raw Data Preview")
@@ -90,7 +92,7 @@ if uploaded_file:
     numeric_cols = df_clean.select_dtypes(include='number').columns
 
     if len(numeric_cols) > 0:
-        st.line_chart(df_clean[numeric_cols])
+        st.line_chart(df_clean[numeric_cols].head(50))
 
       # Insight generation
     st.subheader("🤖 Automated Insights")
@@ -99,6 +101,6 @@ if uploaded_file:
     st.write(df_clean.describe())
 
     if len(numeric_cols) > 0:
-        max_col = numeric_cols[0]
+        max_col = st.selectbox("📊 Select column for insights", numeric_cols)
         st.write(f"Highest value in {max_col}: ", df_clean[max_col].max())
         st.write(f"Lowest value in {max_col}: ", df_clean[max_col].min())
